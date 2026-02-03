@@ -349,7 +349,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 Data Science Enthusiast | Analytics Engineer | MLOps Practitioner
 
 [![GitHub](https://img.shields.io/badge/GitHub-Follow-black)](https://github.com/Khushi-c-sharma)
-[![Email](https://img.shields.io/badge/Email-Contact-red)](mailto:your.email@example.com)
+[![Email](https://img.shields.io/badge/Email-Contact-red)](mailto:khushisharmalive1908@gmail.com)
 
 ---
 
