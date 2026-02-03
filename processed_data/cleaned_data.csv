@@ -1,0 +1,101 @@
+Student_ID,Name,Age,Gender,State of Residence,Department,CGPA,Placed,Placement_Package_LPA
+1001,Aarav Mahajan,20,M,Uttar Pradesh,Information Technology,6.53,True,7.5
+1002,Pranjal Singh,18,M,Maharashtra,Computer Science,6.83,False,0.0
+1003,Swaraj Reddy,23,M,West Bengal,Information Technology,7.71,True,8.3
+1004,Rohan Pillai,21,M,Telangana,Electronics,6.59,False,0.0
+1005,Priyanka Gupta,21,F,Tamil Nadu,Electronics,9.22,True,8.0
+1006,Sana Mahajan,21,F,Tamil Nadu,Biotechnology,6.3,True,5.5
+1007,Pranjal Reddy,23,F,Tamil Nadu,Computer Science,8.51,True,9.81
+1008,Meera Das,24,F,Tamil Nadu,Biotechnology,7.06,False,0.0
+1009,Sneha Deshpande,20,F,Uttar Pradesh,Chemical Engineering,7.01,False,0.0
+1010,Rohan Malhotra,23,M,Uttar Pradesh,Information Technology,7.76,True,8.35
+1011,Amit Iyer,19,M,Maharashtra,Civil,7.2,True,4.63
+1012,Pranjal Pillai,20,M,Uttar Pradesh,Chemical Engineering,7.9,False,0.0
+1013,Riya Verma,19,F,Uttar Pradesh,Chemical Engineering,8.13,True,5.85
+1014,Pranjal Pande,20,F,Uttar Pradesh,Information Technology,7.94,True,8.56
+1015,Arjun Deshmukh,23,M,Delhi,Civil,8.59,True,5.57
+1016,Karan Pande,22,M,Karnataka,Mechanical,6.96,False,0.0
+1017,Arjun Menon,22,M,Kerala,Civil,8.44,True,5.47
+1018,Sneha Patel,18,F,Kerala,Mechanical,8.9,True,6.43
+1019,Yash Kulkarni,22,M,Uttar Pradesh,Information Technology,7.42,True,7.97
+1020,Amit Chatterjee,18,M,Tamil Nadu,Electronics,9.34,True,8.11
+1021,Kavya Iyer,19,F,Tamil Nadu,Computer Science,8.78,True,10.14
+1022,Swaraj Deshmukh,19,M,Karnataka,Mechanical,6.63,False,0.0
+1023,Tanvi Malhotra,24,F,Uttar Pradesh,Chemical Engineering,7.18,False,0.0
+1024,Ishita Joshi,21,F,Tamil Nadu,Information Technology,6.85,True,7.5
+1025,Pranjal Das,18,M,Tamil Nadu,Chemical Engineering,8.4,True,6.05
+1026,Amit Gupta,22,M,Uttar Pradesh,Electronics,8.54,True,7.39
+1027,Swaraj Deshmukh,23,M,Karnataka,Information Technology,8.98,True,9.73
+1028,Tanvi Khan,18,F,West Bengal,Electronics,7.61,True,6.55
+1029,Arjun Iyer,21,M,Telangana,Civil,9.27,True,6.03
+1030,Kabir Reddy,22,M,Karnataka,Information Technology,7.6,True,8.17
+1031,Vivek Patel,24,M,Tamil Nadu,Computer Science,8.48,False,0.0
+1032,Vivek Das,19,M,West Bengal,Biotechnology,7.83,False,0.0
+1033,Rohan Pande,18,M,West Bengal,Electronics,9.52,True,8.27
+1034,Ishani Singh,23,F,Karnataka,Information Technology,6.72,True,7.5
+1035,Pranjal Mahajan,22,M,Maharashtra,Chemical Engineering,7.19,True,5.14
+1036,Muskaan Joshi,19,F,Maharashtra,Mechanical,6.3,True,5.0
+1037,Rahul Pande,18,M,Uttar Pradesh,Mechanical,8.26,False,0.0
+1038,Pranjal Choudhury,22,F,Telangana,Electronics,6.78,False,0.0
+1039,Aryan Pande,19,M,Kerala,Biotechnology,7.2,False,0.0
+1040,Aarav Patel,22,M,Tamil Nadu,Computer Science,8.04,False,0.0
+1041,Vikram Gupta,19,M,Telangana,Electronics,6.6,False,0.0
+1042,Muskaan Sharma,23,F,Kerala,Chemical Engineering,6.39,False,0.0
+1043,Priyanka Khan,23,F,Delhi,Electronics,7.07,True,6.06
+1044,Tanvi Menon,23,F,Kerala,Mechanical,7.86,False,0.0
+1045,Vivek Kulkarni,21,M,Kerala,Computer Science,6.01,False,0.0
+1046,Sneha Mahajan,21,F,West Bengal,Mechanical,6.04,True,5.0
+1047,Swaraj Iyer,24,M,Telangana,Mechanical,8.1,True,5.83
+1048,Yash Deshpande,24,M,Maharashtra,Electronics,6.8,True,6.0
+1049,Vikram Malhotra,24,M,West Bengal,Mechanical,8.85,True,6.39
+1050,Rohan Nair,21,M,Maharashtra,Information Technology,8.8,True,9.53
+1051,Anjali Menon,24,F,Uttar Pradesh,Electronics,6.6,False,0.0
+1052,Sana Chatterjee,19,F,Uttar Pradesh,Civil,9.49,True,6.18
+1053,Ishani Das,19,F,Maharashtra,Chemical Engineering,6.73,True,5.0
+1054,Aryan Deshpande,23,M,West Bengal,Chemical Engineering,9.73,True,7.05
+1055,Ananya Khan,20,F,Delhi,Mechanical,9.66,True,7.0
+1056,Sana Khan,22,F,West Bengal,Electronics,8.77,True,7.59
+1057,Anjali Bose,22,F,Tamil Nadu,Biotechnology,9.42,True,7.5
+1058,Aryan Iyer,23,M,West Bengal,Computer Science,7.98,False,0.0
+1059,Vikram Singh,18,M,Telangana,Mechanical,7.19,False,0.0
+1060,Muskaan Kapoor,23,F,West Bengal,Electronics,7.53,True,6.48
+1061,Kabir Singh,23,M,West Bengal,Chemical Engineering,8.84,True,6.38
+1062,Pranjal Kapoor,21,M,Maharashtra,Electronics,7.09,True,6.08
+1063,Ishita Patel,21,F,Uttar Pradesh,Mechanical,7.8,False,0.0
+1064,Vivek Kapoor,22,M,Telangana,Computer Science,9.11,True,10.53
+1065,Yash Das,24,M,Uttar Pradesh,Information Technology,6.09,True,7.5
+1066,Meera Patel,21,F,Uttar Pradesh,Chemical Engineering,8.65,True,6.24
+1067,Simran Das,19,F,Maharashtra,Civil,9.27,True,6.03
+1068,Deepak Das,19,M,Karnataka,Computer Science,8.12,False,0.0
+1069,Siddharth Deshmukh,24,M,Karnataka,Chemical Engineering,8.02,False,0.0
+1070,Ishita Bose,24,F,West Bengal,Civil,9.45,True,6.15
+1071,Sneha Mahajan,24,F,Karnataka,Biotechnology,6.98,True,5.5
+1072,Muskaan Chatterjee,23,F,Uttar Pradesh,Electronics,7.67,False,0.0
+1073,Aryan Bhattacharjee,20,M,Tamil Nadu,Information Technology,6.57,True,7.5
+1074,Kabir Gupta,21,M,West Bengal,Electronics,8.06,True,6.95
+1075,Deepak Pande,24,M,Maharashtra,Civil,9.35,True,6.09
+1076,Naina Sharma,20,F,Kerala,Civil,7.48,False,0.0
+1077,Khushi Mahajan,23,F,Uttar Pradesh,Biotechnology,6.83,True,5.5
+1078,Karan Bhattacharjee,23,M,West Bengal,Chemical Engineering,6.63,True,5.0
+1079,Swaraj Sharma,21,M,Maharashtra,Computer Science,8.44,True,9.73
+1080,Sneha Iyer,20,F,West Bengal,Electronics,6.8,True,6.0
+1081,Diya Singh,20,F,Tamil Nadu,Biotechnology,6.07,False,0.0
+1082,Kavya Kulkarni,18,F,Maharashtra,Civil,6.12,True,4.5
+1083,Aditya Das,19,M,Karnataka,Chemical Engineering,6.43,False,0.0
+1084,Diya Deshpande,19,F,Tamil Nadu,Civil,9.11,True,5.92
+1085,Priyanka Choudhury,18,F,Kerala,Mechanical,8.57,True,6.18
+1086,Simran Pillai,19,F,Tamil Nadu,Mechanical,8.62,True,6.21
+1087,Arjun Pillai,24,M,Kerala,Civil,8.6,True,5.58
+1088,Pranjal Iyer,20,M,West Bengal,Chemical Engineering,7.41,False,0.0
+1089,Ananya Singh,24,F,Karnataka,Computer Science,7.65,True,8.78
+1090,Riya Singh,19,F,Kerala,Mechanical,9.07,True,6.55
+1091,Ishita Singh,24,F,Kerala,Electronics,9.24,True,8.02
+1092,Aryan Patel,19,M,Karnataka,Mechanical,8.32,True,5.99
+1093,Abhimanyu Bhattacharjee,19,M,Karnataka,Information Technology,7.35,True,7.89
+1094,Diya Malhotra,18,F,Uttar Pradesh,Computer Science,6.92,True,8.0
+1095,Abhimanyu Kulkarni,23,M,Karnataka,Biotechnology,9.01,True,7.16
+1096,Yash Das,21,M,Uttar Pradesh,Electronics,8.52,True,7.37
+1097,Naina Malhotra,22,F,Telangana,Biotechnology,9.79,True,7.8
+1098,Neha Pillai,21,F,Kerala,Electronics,6.96,True,6.0
+1099,Amit Khan,23,M,Delhi,Information Technology,6.82,True,7.5
+1100,Priyanka Reddy,20,F,Uttar Pradesh,Electronics,6.68,True,6.0

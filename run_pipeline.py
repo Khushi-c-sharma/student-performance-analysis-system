@@ -27,6 +27,13 @@ LOG_FILE = LOG_DIR / "pipeline.log"
 DATA_DIR = PROJECT_ROOT / "data"
 CSV_PATH = DATA_DIR / "university_data.csv"
 
+# Output directory for preprocessed data
+PROCESSED_DATA_DIR = PROJECT_ROOT / "processed_data"
+PROCESSED_DATA_DIR.mkdir(parents=True, exist_ok=True)
+
+PROCESSED_CSV_PATH = PROCESSED_DATA_DIR / "cleaned_data.csv"
+
+
 # Output directory for generated visualizations
 FIGURES_DIR = PROJECT_ROOT / "visualizations"
 FIGURES_DIR.mkdir(parents=True, exist_ok=True)
@@ -102,7 +109,14 @@ def run_pipeline() -> None:
             "CGPA": (0.0, 10.0),
             "Placement_Package_LPA": (0.0, 100.0),
         },
+        impute=True,
+        numeric_strategy="median",
+        categorical_strategy="mode",
     )
+
+    # Save the cleaned dataset
+    df_clean.to_csv(PROCESSED_CSV_PATH, index=False)
+    logger.info("Saved the preprocessed dataset successfully.")
 
     dept_df = analyzer.department_placement_stats()
     grade_df = analyzer.grade_distribution()
