@@ -348,28 +348,45 @@ class Analysis:
 
     def grade_distribution(
         self,
-        bins=(0, 7.0, 8.5, 10.0),
-        labels=("Second Class", "First Class", "Distinction"),
         df: Optional[pd.DataFrame] = None,
+        *,
+        bins: tuple[float, ...] = (0.0, 7.0, 8.5, 10.0),
+        labels: tuple[str, ...] = ("Second Class", "First Class", "Distinction"),
     ) -> pd.Series:
         """
-        Categorize CGPA into grade buckets and return distribution.
+        Compute the distribution of academic grades based on CGPA ranges.
         """
+
+        # Resolve the DataFrame source:
+        # Prefer the explicitly passed DataFrame; otherwise, use internal state.
         if df is None:
             df = self.df
 
+        # Fail fast if no data is available at all
         if df is None:
             raise ValueError("No DataFrame available. Load data first.")
 
+        # Ensure the required column exists before proceeding
+        if "CGPA" not in df.columns:
+            raise KeyError("CGPA column missing from dataset")
+
+        # Validate grading configuration:
+        # Number of labels must match the number of CGPA intervals
+        if len(bins) - 1 != len(labels):
+            raise ValueError("Number of labels must be exactly len(bins) - 1")
+
         logger.info("Computing grade distribution")
 
+        # Convert CGPA to float explicitly to avoid dtype-related issues,
+        # then bin values into categorical grade labels
         grades = pd.cut(
-            df["CGPA"],
+            df["CGPA"].astype(float),
             bins=bins,
             labels=labels,
             include_lowest=True,
         )
 
+        # Return a sorted distribution of grades for stable reporting
         return grades.value_counts().sort_index()
 
 

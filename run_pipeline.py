@@ -1,7 +1,6 @@
 import logging
 import logging.config
 from pathlib import Path
-import sys
 
 from data_analysis import Analysis
 from visualisation import (
@@ -81,62 +80,101 @@ logger = logging.getLogger(__name__)
 
 def run_pipeline() -> None:
     """
-    Execute the full analytics and visualization workflow.
+    Execute the end-to-end analytics & visualization pipeline.
 
-    Pipeline steps:
-    1. Load raw dataset from CSV
-    2. Clean and preprocess data (validation, imputation)
-    3. Compute analytical summaries
-    4. Generate visualizations
-    5. Persist figures to disk
+    Stages:
+    1. Data ingestion
+    2. Data validation & preprocessing
+    3. Analytical computation
+    4. Visualization generation
+    5. Artifact persistence
 
     Raises:
         FileNotFoundError: If the dataset is missing
         Exception: For any unexpected runtime failure
     """
     logger.info("Starting analytics & visualization pipeline")
+    try:
+        # Initialize analysis component with dataset path
+        analyzer = Analysis(CSV_PATH)
+        logger.info("Stage 1: Loading raw dataset")
 
-    # Initialize analysis component with dataset path
-    analyzer = Analysis(CSV_PATH)
+        # Load raw dataset
+        df = analyzer.load_data()
 
-    # Load raw dataset
-    df = analyzer.load_data()
+        logger.info("Stage 2: Preprocessing & data validation")
 
-    # Clean and preprocess dataset
-    df_clean = analyzer.preprocess_data(
-        df,
-        value_ranges={
-            "CGPA": (0.0, 10.0),
-            "Placement_Package_LPA": (0.0, 100.0),
-        },
-        impute=True,
-        numeric_strategy="median",
-        categorical_strategy="mode",
-    )
+        # Clean and preprocess dataset
+        df_clean = analyzer.preprocess_data(
+            df,
+            value_ranges={
+                "CGPA": (0.0, 10.0),
+                "Placement_Package_LPA": (0.0, 100.0),
+            },
+            impute=True,
+            numeric_strategy="median",
+            categorical_strategy="mode",
+        )
 
-    # Save the cleaned dataset
-    df_clean.to_csv(PROCESSED_CSV_PATH, index=False)
-    logger.info("Saved the preprocessed dataset successfully.")
+        # Save the cleaned dataset
+        df_clean.to_csv(PROCESSED_CSV_PATH, index=False)
+        logger.info(
+            "Preprocessed dataset saved to %s",
+            PROCESSED_CSV_PATH,
+        )
 
-    dept_df = analyzer.department_placement_stats()
-    grade_df = analyzer.grade_distribution()
+        logger.info("Stage 3: Computing analytical summaries")
 
-    fig = plot_department_performance(dept_df)
-    save_figure(fig, FIGURES_DIR / "department_performance.png")
+        summary_stats = analyzer.get_summary_statistics(df_clean)
+        dept_stats = analyzer.department_placement_stats(df_clean)
+        grade_dist = analyzer.grade_distribution(
+            df=df_clean,
+            bins=(0.0, 6.0, 7.5, 10.0),
+            labels=("Pass", "Merit", "Distinction"),
+        )
+        top_students = analyzer.top_performers(
+            top_n=5,
+            df=df_clean,
+        )
 
-    fig = plot_cgpa_vs_salary(df_clean)
-    save_figure(fig, FIGURES_DIR / "cgpa_vs_salary.png")
+        logger.info("Summary statistics computed")
+        logger.info("Department placement stats computed")
+        logger.info("Grade distribution computed")
+        logger.info("Top-performing students identified")
 
-    fig = plot_grade_distribution(grade_df)
-    save_figure(fig, FIGURES_DIR / "grade_distribution.png")
+        logger.debug("Summary statistics:\n%s", summary_stats)
+        logger.debug("Department stats:\n%s", dept_stats)
+        logger.debug("Grade distribution:\n%s", grade_dist)
+        logger.debug("Top performers:\n%s", top_students)
 
-    fig = plot_correlation_heatmap(
-        df_clean,
-        columns=["CGPA", "Placement_Package_LPA", "Age"],
-    )
-    save_figure(fig, FIGURES_DIR / "correlation_matrix.png")
+        logger.info("Stage 4: Generating visualizations")
 
-    logger.info("Pipeline completed successfully")
+        fig = plot_department_performance(dept_stats)
+        save_figure(fig, FIGURES_DIR / "department_performance.png")
+
+        fig = plot_cgpa_vs_salary(df_clean)
+        save_figure(fig, FIGURES_DIR / "cgpa_vs_salary.png")
+
+        fig = plot_grade_distribution(grade_dist)
+        save_figure(fig, FIGURES_DIR / "grade_distribution.png")
+
+        fig = plot_correlation_heatmap(
+            df_clean,
+            columns=["CGPA", "Placement_Package_LPA", "Age"],
+        )
+        save_figure(fig, FIGURES_DIR / "correlation_matrix.png")
+
+        logger.info("All visualizations generated and saved")
+
+        logger.info("Pipeline completed successfully")
+
+    except FileNotFoundError as e:
+        logger.error("Dataset not found: %s", e)
+        raise
+
+    except Exception as e:
+        logger.exception("Pipeline execution failed due to an unexpected error")
+        raise RuntimeError("Analytics pipeline failed") from e
 
 
 # -------------------------------------------------
@@ -144,12 +182,4 @@ def run_pipeline() -> None:
 # -------------------------------------------------
 
 if __name__ == "__main__":
-    try:
-        run_pipeline()
-    except FileNotFoundError as e:
-        logger.error(f"File not found: {e}")
-        sys.exit(1)
-    except Exception:
-        # Logs full traceback for post-mortem debugging
-        logger.exception("Pipeline failed")
-        sys.exit(1)
+    run_pipeline()
