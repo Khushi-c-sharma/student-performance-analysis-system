@@ -1,454 +1,345 @@
-"""
-This module provides functionality for loading, preprocessing, and analyzing
-university datasets. It includes data validation, missing value imputation,
-duplicate removal, and outlier detection.
-"""
-
 import pandas as pd
 from pathlib import Path
-import sys
+
 import logging
-from typing import Dict, Tuple, Optional
+from typing import Dict
+
+
+logging.basicConfig(
+    level=logging.INFO,
+    format="%(asctime)s | %(levelname)s | %(message)s",
+)
 
 logger = logging.getLogger(__name__)
 
 # Define project paths
 PROJECT_ROOT = Path(__file__).resolve().parent
 DATA_DIR = PROJECT_ROOT / "data"
-CSV_PATH = DATA_DIR / "university_data.csv"
+CSV_PATH = DATA_DIR / "placement_data.csv"
+
+PROCESSED_DATA_DIR = PROJECT_ROOT / "processed"
+PROCESSED_DATA_DIR.mkdir(parents=True, exist_ok=True)
 
 
-class Analysis:
+DEPARTMENT_MAPPING = {
+    "Cse": "Computer Science",
+    "Cs": "Computer Science",
+    "Comp Sci": "Computer Science",
+    "It": "Information Technology",
+    "Info Tech": "Information Technology",
+    "Ece": "Electronics And Communication",
+    "E&C": "Electronics And Communication",
+    "Electronics": "Electronics And Communication",
+    "Eee": "Electrical Engineering",
+    "Ee": "Electrical Engineering",
+    "Electrical": "Electrical Engineering",
+    "Me": "Mechanical Engineering",
+    "Mech": "Mechanical Engineering",
+    "Mechanical": "Mechanical Engineering",
+    "Ce": "Civil Engineering",
+    "Civil": "Civil Engineering",
+}
+
+STATE_MAPPING = {
+    "Mh": "Maharashtra",
+    "Maharashtra": "Maharashtra",
+    "Tn": "Tamil Nadu",
+    "Tamil Nadu": "Tamil Nadu",
+    "Tamilnadu": "Tamil Nadu",
+    "Up": "Uttar Pradesh",
+    "U.P.": "Uttar Pradesh",
+    "Wb": "West Bengal",
+    "W Bengal": "West Bengal",
+    "Ap": "Andhra Pradesh",
+    "A.P.": "Andhra Pradesh",
+}
+
+
+class PlacementDataCleaningPipeline:
     """
-    A class for analyzing university data with preprocessing capabilities.
+    End-to-end data cleaning pipeline for the student placement dataset.
 
-    This class handles the complete data analysis pipeline including:
-    - Loading data from CSV files
-    - Data validation and quality checks
-    - Missing value imputation
-    - Duplicate removal
-    - Outlier detection and removal
-
-    Attributes:
-        CSV_PATH (Path): Path to the CSV file containing university data
-        df (pd.DataFrame): The loaded and preprocessed DataFrame
+    Responsibilities:
+    - Load and validate raw data
+    - Standardize categorical fields
+    - Fix logical inconsistencies
+    - Handle missing values safely
     """
 
-    def __init__(self, CSV_PATH: Path):
+    def __init__(
+        self,
+        csv_path: str,
+        department_mapping: Dict[str, str],
+        state_mapping: Dict[str, str],
+    ) -> None:
         """
-        Initialize the Analysis class with a CSV file path.
+        Initialize the pipeline with configuration.
 
         Args:
-            CSV_PATH (Path): Path object pointing to the CSV file location
+            csv_path (str): Path to the input CSV file
+            department_mapping (Dict[str, str]): Department normalization mapping
+            state_mapping (Dict[str, str]): State normalization mapping
         """
-        self.CSV_PATH = CSV_PATH
-        self.df = None  # Will store the loaded DataFrame
+        self.csv_path = csv_path
+        self.department_mapping = department_mapping
+        self.state_mapping = state_mapping
+        self.df: pd.DataFrame | None = None
 
-    def load_data(self) -> pd.DataFrame:
-        """
-        Load dataset from CSV file and perform initial exploration.
+    # ------------------------------------------------------------------
+    # Data Loading
+    # ------------------------------------------------------------------
 
-        This method:
-        - Checks if the file exists
-        - Loads the CSV into a pandas DataFrame
-        - Logs dataset metadata (shape, columns, types, null counts, memory usage)
-
-        Returns:
-            pd.DataFrame: The loaded dataset
-
-        Raises:
-            FileNotFoundError: If the CSV file doesn't exist at the specified path
-            Exception: If there's an error reading the CSV file
-        """
-        # Verify file exists before attempting to load
-        if not self.CSV_PATH.exists():
-            raise FileNotFoundError(f"CSV not found at: {self.CSV_PATH}")
-
+    def load_data(self) -> None:
+        """Load dataset from disk."""
         try:
-            # Load CSV file into DataFrame
-            df = pd.read_csv(self.CSV_PATH)
+            self.df = pd.read_csv(self.csv_path)
             logger.info("Dataset loaded successfully")
-        except Exception:
+        except Exception as e:
             logger.exception("Failed to load dataset")
-            raise
+            raise e
 
-        # Log dataset overview information
-        logger.info(f"Shape: {df.shape}")
-        logger.info(f"Columns: {list(df.columns)}")
-        logger.info(f"Dtypes:\n{df.dtypes}")
-        logger.info(f"Non-null counts:\n{df.notnull().sum()}")
-        logger.info(f"Memory usage (bytes):\n{df.memory_usage(deep=True)}")
+    # ------------------------------------------------------------------
+    # Diagnostics & Validation
+    # ------------------------------------------------------------------
 
-        # Store the DataFrame in the instance
-        self.df = df
-        return df
-
-    def impute_missing_values(
-        self,
-        df: pd.DataFrame,
-        numeric_strategy: str = "median",
-        categorical_strategy: str = "mode",
-    ) -> pd.DataFrame:
-        """
-        Impute missing values in the dataset using specified strategies.
-
-        This method handles missing data by:
-        - Identifying numeric and categorical columns
-        - Applying appropriate imputation strategies for each type
-        - Logging imputation actions
-
-        Args:
-            df (pd.DataFrame): DataFrame with potential missing values
-            numeric_strategy (str): Strategy for numeric columns. Options:
-                - "mean": Replace with column mean
-                - "median": Replace with column median (default, robust to outliers)
-                - "zero": Replace with 0
-            categorical_strategy (str): Strategy for categorical columns. Options:
-                - "mode": Replace with most frequent value (default)
-                - "missing": Replace with "Missing" string
-
-        Returns:
-            pd.DataFrame: DataFrame with imputed values
-        """
-        logger.info("Starting missing value imputation...")
-
-        # Separate numeric and categorical columns
-        numeric_cols = df.select_dtypes(include=["number"]).columns.tolist()
-        categorical_cols = df.select_dtypes(
-            include=["object", "category"]
-        ).columns.tolist()
-
-        # Impute numeric columns
-        for col in numeric_cols:
-            missing_count = df[col].isna().sum()
-
-            if missing_count > 0:
-                if numeric_strategy == "mean":
-                    fill_value = df[col].mean()
-                    strategy_name = "mean"
-                elif numeric_strategy == "median":
-                    fill_value = df[col].median()
-                    strategy_name = "median"
-                elif numeric_strategy == "zero":
-                    fill_value = 0
-                    strategy_name = "zero"
-                else:
-                    # Default to median if invalid strategy provided
-                    fill_value = df[col].median()
-                    strategy_name = "median (default)"
-
-                df[col].fillna(fill_value, inplace=True)
-                logger.info(
-                    f"Imputed {missing_count} missing values in '{col}' "
-                    f"with {strategy_name}: {fill_value:.2f}"
-                )
-
-        # Impute categorical columns
-        for col in categorical_cols:
-            missing_count = df[col].isna().sum()
-
-            if missing_count > 0:
-                if categorical_strategy == "mode":
-                    # Get the most frequent value (mode)
-                    mode_value = df[col].mode()
-                    if not mode_value.empty:
-                        fill_value = mode_value[0]
-                        strategy_name = "mode"
-                    else:
-                        # If no mode exists, use "Unknown"
-                        fill_value = "Unknown"
-                        strategy_name = "Unknown (no mode found)"
-                elif categorical_strategy == "missing":
-                    fill_value = "Missing"
-                    strategy_name = "Missing"
-                else:
-                    # Default to mode if invalid strategy provided
-                    mode_value = df[col].mode()
-                    fill_value = mode_value[0] if not mode_value.empty else "Unknown"
-                    strategy_name = "mode (default)"
-
-                df[col].fillna(fill_value, inplace=True)
-                logger.info(
-                    f"Imputed {missing_count} missing values in '{col}' "
-                    f"with {strategy_name}: '{fill_value}'"
-                )
-
-        logger.info("Missing value imputation completed")
-        return df
-
-    def preprocess_data(
-        self,
-        df: pd.DataFrame,
-        value_ranges: Optional[Dict[str, Tuple[float, float]]] = None,
-        impute: bool = True,
-        numeric_strategy: str = "median",
-        categorical_strategy: str = "mode",
-    ) -> pd.DataFrame:
-        """
-        Preprocess the dataset by handling missing values, duplicates, and outliers.
-
-        This comprehensive preprocessing pipeline:
-        1. Reports missing values
-        2. Optionally imputes missing values
-        3. Removes duplicate rows
-        4. Validates values against specified ranges
-        5. Removes invalid/out-of-range values
-
-        Args:
-            df (pd.DataFrame): Raw DataFrame to preprocess
-            value_ranges (Dict[str, Tuple[float, float]], optional):
-                Dictionary mapping column names to (min, max) tuples for validation.
-                Example: {"age": (0, 100), "cgpa": (0.0, 10.0)}
-            impute (bool): Whether to perform missing value imputation (default: True)
-            numeric_strategy (str): Imputation strategy for numeric columns
-            categorical_strategy (str): Imputation strategy for categorical columns
-
-        Returns:
-            pd.DataFrame: Cleaned and preprocessed DataFrame
-        """
-        logger.info("Starting data preprocessing...")
-
-        # Step 1: Check for missing values
-        missing = df.isna().sum()
-        missing = missing[missing > 0]
-
-        if not missing.empty:
-            logger.info(f"Missing values detected:\n{missing}")
-
-            # Step 2: Impute missing values if requested
-            if impute:
-                df = self.impute_missing_values(
-                    df,
-                    numeric_strategy=numeric_strategy,
-                    categorical_strategy=categorical_strategy,
-                )
-            else:
-                logger.info("Skipping imputation (impute=False)")
-        else:
-            logger.info("No missing values detected")
-
-        # Step 3: Remove duplicate rows
-        og_len = len(df)
-        df = df.drop_duplicates()
-        duplicates_removed = og_len - len(df)
-        logger.info(f"Removed {duplicates_removed} duplicate rows")
-
-        # Step 4: Validate value ranges (if provided)
-        if value_ranges:
-            logger.info("Validating value ranges...")
-
-            for col, (min_val, max_val) in value_ranges.items():
-                if col in df.columns:
-                    # Check if column is numeric
-                    if not pd.api.types.is_numeric_dtype(df[col]):
-                        logger.warning(
-                            f"Skipping range validation for non-numeric column '{col}'"
-                        )
-                        continue
-
-                    # Identify values outside the valid range
-                    invalid = ~df[col].between(min_val, max_val)
-                    count = invalid.sum()
-
-                    if count > 0:
-                        logger.warning(
-                            f"{count} invalid values in '{col}' "
-                            f"(expected range {min_val}–{max_val})"
-                        )
-                        # Remove rows with invalid values
-                        df = df[~invalid]
-                else:
-                    logger.warning(
-                        f"Column '{col}' not found in DataFrame, skipping validation"
-                    )
-
-        # Step 5: Log final dataset shape
-        logger.info(f"Final dataset shape: {df.shape}")
-        logger.info("Data preprocessing completed successfully")
-
-        # Update the instance DataFrame
-        self.df = df
-        return df
-
-    def get_summary_statistics(self, df: Optional[pd.DataFrame] = None) -> pd.DataFrame:
-        """
-        Generate summary statistics for the dataset.
-
-        Args:
-            df (pd.DataFrame, optional): DataFrame to summarize.
-                If None, uses the instance's stored DataFrame.
-
-        Returns:
-            pd.DataFrame: Summary statistics including count, mean, std, min, max, etc.
-        """
-        if df is None:
+    def log_basic_diagnostics(self) -> None:
+        """Log shape, missing values, and duplicate counts."""
+        try:
             df = self.df
+            logger.info("Dataset shape: %s", df.shape)
+            logger.info("Missing values summary:\n%s", df.isna().sum())
 
-        if df is None:
-            raise ValueError("No DataFrame available. Load data first.")
-
-        logger.info("Generating summary statistics...")
-        return df.describe(include="all")
-
-    def department_placement_stats(
-        self, df: Optional[pd.DataFrame] = None
-    ) -> pd.DataFrame:
-        """
-        Compute department-wise placement statistics.
-
-        Returns:
-            pd.DataFrame: Aggregated department-level metrics
-        """
-        if df is None:
-            df = self.df
-
-        if df is None:
-            raise ValueError("No DataFrame available. Load data first.")
-
-        logger.info("Computing department-wise placement statistics")
-
-        return (
-            df.groupby("Department")
-            .agg(
-                Avg_CGPA=("CGPA", "mean"),
-                Avg_Salary_LPA=("Placement_Package_LPA", "mean"),
-                Highest_Package=("Placement_Package_LPA", "max"),
-                Total_Students=("Department", "count"),
+            logger.info(
+                "Duplicates (Name, Department, CGPA): %d",
+                df.duplicated(subset=["Name", "Department", "CGPA"]).sum(),
             )
-            .round(2)
-            .reset_index()
-        )
+            logger.info(
+                "Duplicates (Name, Age, Department, CGPA): %d",
+                df.duplicated(subset=["Name", "Age", "Department", "CGPA"]).sum(),
+            )
+        except Exception as e:
+            logger.exception("Error during diagnostics")
+            raise e
 
-    def top_performers(
-        self,
-        cgpa_threshold: float = 9.0,
-        top_n: int = 10,
-        placed_only: bool = True,
-        df: Optional[pd.DataFrame] = None,
-    ) -> pd.DataFrame:
-        """
-        Identify top-performing students based on CGPA and placement package.
-        """
-        if df is None:
+    def validate_numeric_ranges(self) -> None:
+        """Validate numeric ranges and log anomalies."""
+        try:
             df = self.df
 
-        if df is None:
-            raise ValueError("No DataFrame available. Load data first.")
+            logger.info(
+                "Invalid CGPA count: %d",
+                df[(df["CGPA"] < 0) | (df["CGPA"] > 10)].shape[0],
+            )
+            logger.info(
+                "Invalid Age count: %d",
+                df[(df["Age"] < 17) | (df["Age"] > 30)].shape[0],
+            )
+            logger.info(
+                "Invalid 10th Percentage count: %d",
+                df[(df["Tenth_Percentage"] < 0) | (df["Tenth_Percentage"] > 100)].shape[
+                    0
+                ],
+            )
+            logger.info(
+                "Invalid 12th Percentage count: %d",
+                df[
+                    (df["Twelfth_Percentage"] < 0) | (df["Twelfth_Percentage"] > 100)
+                ].shape[0],
+            )
+            logger.info(
+                "Negative placement packages count: %d",
+                df[df["Placement_Package_LPA"] < 0].shape[0],
+            )
 
-        logger.info(f"Selecting top performers (CGPA > {cgpa_threshold}, top {top_n})")
+        except Exception as e:
+            logger.exception("Numeric validation failed")
+            raise e
 
-        data = df[df["CGPA"] > cgpa_threshold]
+    # ------------------------------------------------------------------
+    # Standardization
+    # ------------------------------------------------------------------
 
-        if placed_only and "Placed" in data.columns:
-            data = data[data["Placed"]]
+    def standardize_departments(self) -> None:
+        """Normalize department names."""
+        try:
+            df = self.df
+            before = df["Department"].nunique(dropna=True)
 
-        return data.sort_values("Placement_Package_LPA", ascending=False).head(top_n)[
-            ["Name", "Department", "CGPA", "Placement_Package_LPA"]
-        ]
+            df["Department"] = (
+                df["Department"]
+                .astype(str)
+                .str.strip()
+                .str.title()
+                .replace(self.department_mapping)
+            )
 
-    def grade_distribution(
-        self,
-        df: Optional[pd.DataFrame] = None,
-        *,
-        bins: tuple[float, ...] = (0.0, 7.0, 8.5, 10.0),
-        labels: tuple[str, ...] = ("Second Class", "First Class", "Distinction"),
-    ) -> pd.Series:
+            after = df["Department"].nunique(dropna=True)
+            logger.info("Departments standardized: %d → %d", before, after)
+
+        except Exception as e:
+            logger.exception("Department standardization failed")
+            raise e
+
+    def standardize_states(self) -> None:
+        """Normalize state names."""
+        try:
+            df = self.df
+            before = df["State_of_Residence"].nunique(dropna=True)
+
+            df["State_of_Residence"] = (
+                df["State_of_Residence"]
+                .astype(str)
+                .str.strip()
+                .str.title()
+                .replace(self.state_mapping)
+            )
+
+            after = df["State_of_Residence"].nunique(dropna=True)
+            logger.info("States standardized: %d → %d", before, after)
+
+        except Exception as e:
+            logger.exception("State standardization failed")
+            raise e
+
+    def standardize_names(self) -> None:
+        """Clean and normalize student names."""
+        try:
+            self.df["Name"] = self.df["Name"].astype(str).str.strip().str.title()
+            logger.info("Student names standardized")
+        except Exception as e:
+            logger.exception("Name standardization failed")
+            raise e
+
+    # ------------------------------------------------------------------
+    # Logical Consistency
+    # ------------------------------------------------------------------
+
+    def fix_placement_anomalies(self) -> None:
         """
-        Compute the distribution of academic grades based on CGPA ranges.
+        Fix inconsistencies between placement status and package values.
         """
-
-        # Resolve the DataFrame source:
-        # Prefer the explicitly passed DataFrame; otherwise, use internal state.
-        if df is None:
+        try:
             df = self.df
 
-        # Fail fast if no data is available at all
-        if df is None:
-            raise ValueError("No DataFrame available. Load data first.")
+            mask = (df["Placed"] == True) & (
+                (df["Placement_Package_LPA"] == 0)
+                | (df["Placement_Package_LPA"].isna())
+            )
 
-        # Ensure the required column exists before proceeding
-        if "CGPA" not in df.columns:
-            raise KeyError("CGPA column missing from dataset")
+            logger.info(
+                "Placed students with missing/zero package: %d",
+                mask.sum(),
+            )
 
-        # Validate grading configuration:
-        # Number of labels must match the number of CGPA intervals
-        if len(bins) - 1 != len(labels):
-            raise ValueError("Number of labels must be exactly len(bins) - 1")
+            dept_median = (
+                df[(df["Placed"] == True) & (df["Placement_Package_LPA"] > 0)]
+                .groupby("Department")["Placement_Package_LPA"]
+                .median()
+            )
 
-        logger.info("Computing grade distribution")
+            df.loc[mask, "Placement_Package_LPA"] = (
+                df.loc[mask, "Department"]
+                .map(dept_median)
+                .fillna(6.0)  # documented fallback
+            )
 
-        # Convert CGPA to float explicitly to avoid dtype-related issues,
-        # then bin values into categorical grade labels
-        grades = pd.cut(
-            df["CGPA"].astype(float),
-            bins=bins,
-            labels=labels,
-            include_lowest=True,
-        )
+            inconsistent_unplaced = (
+                (df["Placed"] == False) & (df["Placement_Package_LPA"] > 0)
+            ).sum()
 
-        # Return a sorted distribution of grades for stable reporting
-        return grades.value_counts().sort_index()
+            logger.info(
+                "Unplaced students with non-zero package: %d",
+                inconsistent_unplaced,
+            )
+
+        except Exception as e:
+            logger.exception("Placement anomaly correction failed")
+            raise e
+
+    # ------------------------------------------------------------------
+    # Missing Value Handling
+    # ------------------------------------------------------------------
+
+    def impute_missing_values(self) -> None:
+        """Impute missing values using robust statistical strategies."""
+        try:
+            df = self.df
+
+            # Percentages → median
+            for col in ("Tenth_Percentage", "Twelfth_Percentage"):
+                if col in df.columns:
+                    df[col] = df[col].fillna(df[col].median())
+
+            # CGPA → department median → global median
+            dept_median = df.groupby("Department")["CGPA"].transform("median")
+            df["CGPA"] = df["CGPA"].fillna(dept_median)
+            df["CGPA"] = df["CGPA"].fillna(df["CGPA"].median())
+
+            logger.info("Missing values imputed successfully")
+            logger.info("Remaining null values:\n%s", df.isna().sum())
+
+        except Exception as e:
+            logger.exception("Missing value imputation failed")
+            raise e
+
+    # ------------------------------------------------------------------
+    # Persistence
+    # ------------------------------------------------------------------
+
+    def save_cleaned_data(self, output_path: str, index: bool = False) -> None:
+        """
+        Save the cleaned dataset to disk.
+
+        Args:
+            output_path (str): Path where the cleaned CSV will be saved
+            index (bool): Whether to write row indices to file
+        """
+        try:
+            if self.df is None:
+                raise ValueError("No data available to save. Run cleaning steps first.")
+
+            self.df.to_csv(output_path, index=index)
+            logger.info("Cleaned data saved successfully at: %s", output_path)
+
+        except Exception as e:
+            logger.exception("Failed to save cleaned data")
+            raise e
 
 
 if __name__ == "__main__":
-    """
-    Main execution function demonstrating the Analysis class usage.
-
-    This script:
-    - Loads the university dataset
-    - Applies preprocessing and validation
-    - Runs core analytics methods
-    - Logs key analytical outputs
-    """
     try:
-        # Initialize analyzer with CSV path
-        analyzer = Analysis(CSV_PATH)
+        logger.info("STARTING DATA CLEANING PIPELINE")
 
-        # Load the data
-        df = analyzer.load_data()
-
-        # Define valid ranges for specific columns (example)
-        # Adjust these ranges based on your actual data
-        value_ranges = {
-            "Age": (18, 100),  # Student age range
-            "CGPA": (0.0, 10.0),  # CGPA scale
-        }
-
-        # Preprocess data with imputation enabled
-        df_clean = analyzer.preprocess_data(
-            df,
-            value_ranges=value_ranges,
-            impute=True,
-            numeric_strategy="median",
-            categorical_strategy="mode",
+        cleaner = PlacementDataCleaningPipeline(
+            csv_path=CSV_PATH,
+            department_mapping=DEPARTMENT_MAPPING,
+            state_mapping=STATE_MAPPING,
         )
 
-        # Display summary statistics
-        summary = analyzer.get_summary_statistics(df_clean)
-        logger.info(f"Summary Statistics:\n{summary}")
+        # Step 1: Load
+        cleaner.load_data()
 
-        logger.info("Analysis completed successfully!")
+        # Step 2: Diagnostics & validation
+        cleaner.log_basic_diagnostics()
+        cleaner.validate_numeric_ranges()
 
-        # Department-level analysis
-        dept_stats = analyzer.department_placement_stats()
-        logger.info(f"Department placement stats:\n{dept_stats}")
+        # Step 3: Standardization
+        cleaner.standardize_departments()
+        cleaner.standardize_states()
+        cleaner.standardize_names()
 
-        # Top-performing students
-        top_students = analyzer.top_performers(
-            cgpa_threshold=9.0,
-            top_n=5,
-        )
-        logger.info(f"Top-performing students:\n{top_students}")
+        # Step 4: Logical consistency fixes
+        cleaner.fix_placement_anomalies()
 
-        # Grade distribution
-        grade_dist = analyzer.grade_distribution()
-        logger.info(f"Grade distribution:\n{grade_dist}")
+        # Step 5: Missing value imputation
+        cleaner.impute_missing_values()
 
-        logger.info("Analysis pipeline executed successfully")
+        # Step 6: Persist cleaned data
+        OUTPUT_PATH = PROCESSED_DATA_DIR / "cleaned_placement_data.csv"
+        cleaner.save_cleaned_data(OUTPUT_PATH)
 
-    except FileNotFoundError as e:
-        logger.error(f"File error: {e}")
-        sys.exit(1)
+        logger.info("DATA CLEANING PIPELINE COMPLETED SUCCESSFULLY")
+
     except Exception as e:
-        logger.exception(f"An unexpected error occurred: {e}")
-        sys.exit(1)
+        logger.critical("Pipeline execution failed")
+        raise e

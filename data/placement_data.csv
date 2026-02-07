@@ -1,0 +1,101 @@
+Student_ID,Name,Age,Gender,State_of_Residence,Category,Department,CGPA,Tenth_Percentage,Twelfth_Percentage,Backlogs,Has_Internship,Has_Gap_Year,Placed,Placement_Package_LPA
+1001,Pallavi Saxena,21,F,Haryana,SC,Civil Engineering,8.83,77.79,91.99,0,True,False,False,0.0
+1002,Shubham Gupta,18,M,Telangana,OBC,Biotechnology,8.03,83.85,71.25,1,True,False,False,0.0
+1003,Harsh Chatterjee,23,M,Madhya Pradesh,General,Biotechnology,7.12,75.2,84.8,3,True,False,False,0.0
+1004,Swaraj Bhattacharjee,22,M,Gujarat,OBC,Civil Engineering,8.47,78.68,70.66,0,True,False,False,0.0
+1005,Ishaan W. Rao,21,M,Madhya Pradesh,SC,Electronics and Communication,7.16,83.11,63.26,1,False,False,False,0.0
+1006,Aditi Khan,19,F,Maharashtra,General,Information Technology,6.99,81.93,61.56,1,False,False,False,0.0
+1007,Nikhil Reddy,20,M,Madhya Pradesh,EWS,Computer Science,7.05,73.42,56.83,1,False,False,False,0.0
+1008,Nikhil Kapoor,18,M,Rajasthan,General,Mechanical Engineering,7.43,85.72,75.18,0,False,False,False,0.0
+1009,Priyanka Bose,17,F,Andhra Pradesh,OBC,Chemical Engineering,8.95,88.15,90.36,0,True,False,True,9.25
+1010,Raghav Kapoor,18,M,Rajasthan,General,Electrical Engineering,7.13,78.87,55.95,1,False,False,False,0.0
+1011,Aryan Pillai,24,M,Maharashtra,OBC,Electronics and Communication,6.53,71.62,83.89,2,True,False,True,8.24
+1012,Kabir Khan,19,M,Tamil Nadu,ST,Metallurgy,6.68,82.19,59.0,1,False,False,False,0.0
+1013,Ishaan Iyer,22,M,Madhya Pradesh,General,Biotechnology,8.06,87.8,80.76,0,True,False,True,8.04
+1014,Aryan S. Nair,20,M,Tamil Nadu,General,Computer Science,8.68,91.71,81.63,0,True,False,True,13.62
+1015,Ritika Menon,23,F,Tamil Nadu,General,Information Technology,6.75,85.76,76.43,0,True,False,False,0.0
+1016,Deepak Reddy,22,M,Karnataka,SC,Information Technology,7.51,86.54,72.93,0,False,False,True,10.99
+1017,Muskaan Chatterjee,23,F,Andhra Pradesh,OBC,Info Tech,9.23,75.71,83.85,0,True,False,True,9.09
+1018,Aditya Iyer,24,M,Delhi,ST,Civil Engineering,7.72,76.07,86.1,1,False,False,False,0.0
+1019,Naina Kumar,24,F,Maharashtra,General,Artificial Intelligence,7.31,73.82,79.75,0,True,False,True,11.64
+1020,Anjali Deshmukh,19,F,Haryana,EWS,ME,,73.18,55.97,2,True,False,False,0.0
+1021,Kritika Agarwal,22,F,Andhra Pradesh,OBC,Metallurgy,8.22,94.17,75.88,1,False,False,True,7.54
+1022,Pallavi Reddy,25,F,Karnataka,General,Computer Science,6.17,82.94,78.38,1,False,True,True,8.81
+1023,Meera Khan,21,F,Andhra Pradesh,OBC,Electrical Engineering,6.67,60.82,55.3,2,True,False,False,0.0
+1024,Pranav Menon,23,M,Maharashtra,General,Artificial Intelligence,7.03,86.86,84.0,0,True,False,False,0.0
+1025,Sneha Choudhury,19,F,Delhi,SC,Electrical Engineering,7.16,78.57,73.04,1,True,False,True,8.7
+1026,Siddharth Kulkarni,21,M,Punjab,ST,Civil Engineering,7.29,82.3,71.75,1,True,False,False,0.0
+1027,Sneha Das,23,F,Andhra Pradesh,General,Civil Engineering,6.21,77.61,59.69,1,False,False,False,0.0
+1028,Diya Kulkarni,26,F,West Bengal,OBC,Mechanical Engineering,7.21,65.49,57.11,1,True,True,False,0.0
+1029,Vivek Singh,19,M,Gujarat,General,Metallurgy,7.8,67.8,81.36,0,True,False,True,7.34
+1030,Abhimanyu Chatterjee,26,M,Delhi,SC,Computer Science,7.11,83.69,75.61,2,False,True,True,8.92
+1031,Ritika Saxena,21,F,Punjab,General,Artificial Intelligence,7.37,64.14,59.43,0,True,False,True,12.35
+1032,Tanvi Choudhury,24,F,Delhi,General,Metallurgy,8.12,76.73,85.03,0,True,False,True,8.14
+1033,Pranjal Patel,18,F,Maharashtra,General,Metallurgy,,71.98,73.26,0,True,False,False,0.0
+1034,Ayush Bhattacharjee,25,M,Uttar Pradesh,General,Chemical Engineering,7.31,68.44,66.54,2,True,True,True,6.08
+1035,Naina Patel,19,F,West Bengal,General,Biotechnology,6.66,83.22,60.41,0,False,False,False,0.0
+1036,Priyanka Malhotra,24,F,Karnataka,OBC,Civil Engineering,7.22,81.94,76.99,0,False,False,False,0.0
+1037,Sana Khan,19,F,Andhra Pradesh,OBC,Electronics and Communication,8.59,88.49,89.43,0,False,False,True,8.41
+1038,Riya Nair,24,F,Karnataka,OBC,Information Technology,6.87,77.04,69.95,1,True,False,False,0.0
+1039,Ananya Das,23,F,Karnataka,OBC,Data Science,7.22,83.01,66.52,0,False,False,False,0.0
+1040,Sakshi Mahajan,18,F,Telangana,OBC,Computer Science,,,56.35,2,True,False,True,7.72
+1041,Ishani Nair,18,F,West Bengal,OBC,Metallurgy,8.19,77.45,73.43,0,True,False,False,0.0
+1042,Amit Das,25,M,Punjab,SC,Metallurgy,7.56,62.9,84.2,0,True,True,False,0.0
+1043,Abhimanyu Gupta,19,M,Punjab,SC,Electrical Engineering,7.69,85.22,89.55,0,True,False,False,0.0
+1044,KARAN DESHPANDE,27,M,Andhra Pradesh,SC,Electronics and Communication,6.69,83.36,58.48,2,False,True,True,7.45
+1045,AMIT KUMAR,20,M,Telangana,General,Electronics and Communication,8.42,75.02,70.87,1,False,False,True,9.82
+1046,Vivek Malhotra,18,M,Andhra Pradesh,OBC,Chemical Engineering,8.01,83.69,70.27,0,True,False,True,7.55
+1047,Aarav Agarwal,21,M,Telangana,OBC,Computer Science,7.53,,80.58,0,False,False,False,0.0
+1048,Pranjal Saxena,22,M,Karnataka,General,Civil Engineering,8.84,78.77,80.98,0,True,False,True,8.04
+1049,Tanvi Agarwal,23,F,Madhya Pradesh,General,Civil Engineering,7.86,83.02,88.42,0,False,False,False,0.0
+1050,Pranav Malhotra,18,M,Telangana,General,Artificial Intelligence,9.43,88.42,86.06,0,True,False,True,18.28
+1051,Manav Malhotra,24,M,Rajasthan,SC,Data Science,7.84,67.31,75.08,1,False,False,True,12.81
+1052,Varun Bhattacharjee,19,M,Haryana,OBC,Artificial Intelligence,8.21,90.43,71.65,0,False,False,True,13.73
+1053,Shreya A. Khan,22,F,U.P.,General,Electronics and Communication,8.92,78.36,93.9,0,True,False,True,9.51
+1054,Kritika Verma,20,F,Maharashtra,OBC,Metallurgy,8.85,89.92,87.15,0,True,False,False,0.0
+1055,Nikhil C. Joshi,18,M,Delhi,ST,Metallurgy,6.53,86.44,59.82,0,False,False,False,0.0
+1056,Ananya Chatterjee,23,F,Kerala,General,Information Technology,6.97,75.83,78.12,1,False,False,False,0.0
+1057,Aarav Sharma,18,M,Rajasthan,OBC,Artificial Intelligence,8.11,83.73,76.66,0,True,False,True,13.5
+1058,Kavya Chatterjee,22,F,Tamil Nadu,EWS,Chemical Engineering,,77.12,62.11,1,False,False,False,0.0
+1059,Aditya Pillai,21,M,Tamil Nadu,OBC,Artificial Intelligence,6.98,85.72,77.85,0,True,False,True,11.02
+1060,Ishani Pande,20,F,West Bengal,General,Artificial Intelligence,6.79,76.15,74.26,0,False,False,False,0.0
+1061,Kabir Nair,22,M,Punjab,General,Electrical Engineering,8.49,90.47,73.17,1,True,False,True,9.61
+1062,Neha Pande,24,F,Tamil Nadu,General,Computer Science,8.01,77.14,83.96,0,True,False,True,11.95
+1063,Ritika Chatterjee,23,F,Karnataka,SC,Information Technology,7.84,83.98,73.36,0,False,False,True,10.8
+1064,Pranjal Deshmukh,26,M,Haryana,General,Biotechnology,6.07,77.36,70.23,1,False,True,False,0.0
+1065,Aditi Rao,22,F,West Bengal,General,Information Technology,7.3,78.44,74.97,0,True,False,True,10.68
+1066,Pallavi Bhattacharjee,20,F,Kerala,General,Civil Engineering,9.17,81.1,91.08,0,True,False,True,8.87
+1067,Manav L. Agarwal,20,M,Andhra Pradesh,OBC,Electrical Engineering,8.37,77.11,72.41,1,True,False,False,0.0
+1068,Arjun Menon,22,M,Madhya Pradesh,OBC,Metallurgy,7.51,,79.44,1,False,False,False,0.0
+1069,Deepak Gupta,23,M,Telangana,General,Computer Science,6.86,85.55,68.98,1,False,False,False,0.0
+1070,Sneha Das,24,M,Maharashtra,General,Biotechnology,7.41,72.71,70.51,0,True,False,True,7.22
+1071,Tanvi Singh,18,F,Gujarat,ST,Civil Engineering,7.81,62.2,86.4,0,True,False,False,0.0
+1072,Ritika M. Saxena,19,F,Kerala,OBC,Artificial Intelligence,7.14,76.78,84.07,0,True,False,True,12.73
+1073,Varun Saxena,21,M,Maharashtra,SC,Electrical Engineering,8.13,78.66,84.25,0,True,False,False,0.0
+1074,Harsh P. Patel,19,M,Maharashtra,General,Metallurgy,7.95,87.04,88.49,0,False,False,False,0.0
+1075,Khushi Rao,24,F,Karnataka,General,Information Technology,8.33,84.28,87.84,0,True,False,False,0.0
+1076,Khushi Reddy,21,F,Kerala,General,Chemical Engineering,6.61,81.06,73.51,0,True,False,False,0.0
+1077,Pranjal Kumar,21,M,Kerala,ST,Information Technology,8.31,86.8,70.88,0,True,False,False,0.0
+1078,POOJA PANDE,19,F,Haryana,General,Computer Science,,67.62,65.31,3,True,False,False,0.0
+1079,Muskaan P. Malhotra,19,F,Telangana,EWS,Data Science,7.96,61.89,80.41,0,True,False,True,12.98
+1080,Karan Reddy,20,M,Gujarat,ST,Information Technology,7.34,,74.81,2,False,False,True,8.24
+1081,Tanvi Joshi,24,F,West Bengal,OBC,Civil Engineering,7.0,79.56,80.06,0,False,False,False,0.0
+1082,Sana Sinha,22,F,Maharashtra,OBC,Biotechnology,7.13,74.92,76.25,0,True,False,False,0.0
+1083,Rahul Gupta,18,M,Haryana,General,Mechanical Engineering,7.19,73.18,56.75,2,True,False,True,6.39
+1084,Rohan Das,19,M,Uttar Pradesh,General,Biotechnology,8.13,90.48,87.11,0,True,False,False,0.0
+1085,Sneha Pande,19,F,Madhya Pradesh,General,Computer Science,,80.91,66.88,5,False,False,False,0.0
+1086,Varun Nair,18,M,Gujarat,SC,Civil Engineering,8.21,87.0,75.78,0,True,False,False,0.0
+1087,Riya Sharma,21,F,Telangana,OBC,Civil Engineering,8.54,81.64,89.05,0,False,False,True,7.7
+1088,Muskaan Nair,24,F,Gujarat,SC,Metallurgy,7.66,72.77,71.04,1,True,False,True,0.0
+1089,Harsh Nair,23,M,A.P.,ST,Artificial Intelligence,8.59,82.86,85.45,0,False,False,True,22.98
+1090,Karan Reddy,22,M,Gujarat,OBC,Metallurgy,9.08,76.08,80.47,1,True,False,True,9.29
+1091,Riya Bhattacharjee,22,F,Telangana,General,Metallurgy,6.67,63.01,76.44,0,True,False,False,0.0
+1092,Pranjal F. Agarwal,18,M,Andhra Pradesh,General,Data Science,8.01,76.49,70.3,0,True,False,True,14.71
+1093,Shreya Choudhury,18,F,Maharashtra,General,Chemical Engineering,8.27,94.56,80.93,0,True,False,False,0.0
+1094,Pranjal Nair,21,M,A.P.,ST,Chemical Engineering,6.21,81.64,70.22,0,False,False,False,0.0
+1095,Amit Choudhury,23,M,Karnataka,OBC,Chemical Engineering,6.69,71.29,67.78,0,False,False,False,0.0
+1096,Vivek Deshmukh,22,M,Kerala,OBC,Electrical Engineering,8.73,81.38,89.34,0,True,False,False,0.0
+1097,Pooja Sinha,21,F,Haryana,OBC,Chemical Engineering,6.37,75.96,65.97,1,False,False,False,0.0
+1098,Nikhil Kulkarni,24,M,Haryana,SC,Computer Science,7.67,83.33,83.7,0,True,False,True,12.68
+1099,Anjali Choudhury,19,F,Telangana,General,Information Technology,9.23,92.7,83.57,0,True,False,True,15.24
+1100,Naina Reddy,18,F,Gujarat,OBC,Information Technology,7.25,,60.76,2,False,False,False,0.0
